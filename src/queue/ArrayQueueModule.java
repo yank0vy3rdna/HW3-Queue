@@ -2,10 +2,10 @@ package queue;
 
 import java.util.Arrays;
 
-public class ArrayQueueModule {
+public class ArrayQueueModule extends ArrayQueueInterface{
     static int head;
     static int tail;
-    static Object[] elements = new Object[5];
+    static final Object[] elements = new Object[5];
 
     // Pre: elem != null && elem is immutable
     public static void enqueue(Object elem) {
@@ -58,39 +58,4 @@ public class ArrayQueueModule {
     }
     // Post: res = queue[0..size - 1] && type(res) = array && queue is immutable
 
-    public static String toStr() {
-        StringBuilder res = new StringBuilder("[");
-        for (int i = 0; i < size(); i++) {
-            res.append(String.valueOf(elements[(i + head) % elements.length]));
-            if (i != size() - 1) {
-                res.append(", ");
-            }
-        }
-        res.append("]");
-        return res.toString();
-    }
-    // Post: res = '['queue[0]', queue[1], .., [queue[size - 1]]' && type(res) = String && queue is immutable
-
-    //Pre:
-    private static void ensureCapacity(int capacity) {
-        if (capacity < elements.length) {
-            return;
-        }
-        Object[] newElements = new Object[2 * capacity];
-        for (int i = 0; i < size(); i++) {
-            newElements[i] = elements[(head + i) % elements.length];
-        }
-        tail = size();
-        head = 0;
-        elements = newElements;
-    }
-    // Post: if capacity > size': size = 2 * capacity && queue is immutable
-
-    public static int size() {
-        if (head > tail) {
-            return elements.length - head + tail;
-        }
-        return tail - head;
-    }
-    // Post: res = size (size of queue)
 }

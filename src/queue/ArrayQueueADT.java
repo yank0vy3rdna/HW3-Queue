@@ -36,7 +36,7 @@ public class ArrayQueueADT {
     public static String toStr(ArrayQueueADT queue) {
         StringBuilder res = new StringBuilder("[");
         for (int i = 0; i < size(queue); i++) {
-            res.append(String.valueOf(queue.elements[(i + queue.head) % queue.elements.length]));
+            res.append(queue.elements[(i + queue.head) % queue.elements.length]);
             if (i != size(queue) - 1) {
                 res.append(", ");
             }

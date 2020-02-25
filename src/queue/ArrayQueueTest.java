@@ -269,7 +269,7 @@ public class ArrayQueueTest<T extends ArrayQueueTest.Queue> extends Asserts {
             final URL url = new File(".").toURI().toURL();
             final Class<?> clazz = new URLClassLoader(new URL[]{url}).loadClass(className);
             try {
-                return clazz.newInstance();
+                return clazz.getDeclaredConstructor().newInstance();
             } catch (final Exception e) {
                 throw new AssertionError("Cannot create instance of " + className, e);
             }

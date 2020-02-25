@@ -2,10 +2,10 @@ package queue;
 
 import java.util.Arrays;
 
-public class ArrayQueue {
+public class ArrayQueue extends ArrayQueueInterface{
     private int head;
     private int tail;
-    private Object[] elements = new Object[5];
+    private final Object[] elements = new Object[5];
 
     // Pre: elem != null && elem is immutable
     public void enqueue(Object elem) {
@@ -16,20 +16,6 @@ public class ArrayQueue {
     }
     // Post: size = size' + 1 && queue[0..size'- 1] is immutable && queue[size - 1] = elem
 
-
-    private void ensureCapacity(int capacity) {
-        if (capacity < elements.length) {
-            return;
-        }
-        Object[] newElements = new Object[2 * capacity];
-        for (int i = 0; i < size(); i++) {
-            newElements[i] = elements[(head + i) % elements.length];
-        }
-        tail = size();
-        head = 0;
-        elements = newElements;
-    }
-    // Post: if capacity > size': size = 2 * capacity && queue is immutable
 
 
     // Pre: size > 0
@@ -56,20 +42,6 @@ public class ArrayQueue {
     // Post: res = queue[0..size - 1] && type(res) = array && queue is immutable
 
 
-    public String toStr() {
-        StringBuilder res = new StringBuilder("[");
-        for (int i = 0; i < size(); i++) {
-            res.append(String.valueOf(elements[(i + head) % elements.length]));
-            if (i != size() - 1) {
-                res.append(", ");
-            }
-        }
-        res.append("]");
-        return res.toString();
-    }
-    // Post: res = '['queue[0]', queue[1], .., [queue[size - 1]]' && type(res) = String && queue is immutable
-
-
     // Pre: size > 0
     public Object element() {
         if (isEmpty()) {
@@ -92,14 +64,5 @@ public class ArrayQueue {
         return head == tail;
     }
     // Post: Res = size > 0? && queue is immutable
-
-
-    public int size() {
-        if (head > tail) {
-            return elements.length - head + tail;
-        }
-        return tail - head;
-    }
-    // Post: res = size (size of queue)
 
 }
