@@ -7,19 +7,22 @@ public class ArrayQueueADT {
     private int tail;
     private Object[] elements = new Object[5];
 
+    // Pre: elem != null && elem is immutable
     public static void enqueue(ArrayQueueADT queue, Object elem) {
         assert elem != null;
-        ensureCapacity(queue,size(queue) + 1);
+        ensureCapacity(queue, size(queue) + 1);
         queue.elements[queue.tail] = elem;
         queue.tail = (queue.tail + 1) % queue.elements.length;
     }
+    // Post: size = size' + 1 && queue[0..size'- 1] is immutable && queue[size - 1] = elem
+
 
     private static void ensureCapacity(ArrayQueueADT queue, int capacity) {
         if (capacity < queue.elements.length) {
             return;
         }
         Object[] newElements = new Object[2 * capacity];
-        for (int i = 0; i < size(queue); i++){
+        for (int i = 0; i < size(queue); i++) {
             newElements[i] = queue.elements[(queue.head + i) % queue.elements.length];
         }
         queue.tail = size(queue);
@@ -27,7 +30,35 @@ public class ArrayQueueADT {
         queue.elements = newElements;
 
     }
-    public static Object dequeue(ArrayQueueADT queue){
+    // Post: if capacity > size': size = 2 * capacity && queue is immutable
+
+
+    public static String toStr(ArrayQueueADT queue) {
+        StringBuilder res = new StringBuilder("[");
+        for (int i = 0; i < size(queue); i++) {
+            res.append(String.valueOf(queue.elements[(i + queue.head) % queue.elements.length]));
+            if (i != size(queue) - 1) {
+                res.append(", ");
+            }
+        }
+        res.append("]");
+        return res.toString();
+    }
+    // Post: res = '['queue[0]', queue[1], .., [queue[size - 1]]' && type(res) = String && queue is immutable
+
+
+    public static Object[] toArray(ArrayQueueADT queue) {
+        Object[] res = new Object[size(queue)];
+        for (int i = 0; i < size(queue); i++) {
+            res[i] = queue.elements[(queue.head + i) % queue.elements.length];
+        }
+        return res;
+    }
+    // Post: res = queue[0..size - 1] && type(res) = array && queue is immutable
+
+
+    // Pre: size > 0
+    public static Object dequeue(ArrayQueueADT queue) {
         if (isEmpty(queue)) {
             return null;
         }
@@ -36,24 +67,39 @@ public class ArrayQueueADT {
         queue.head = (queue.head + 1) % queue.elements.length;
         return res;
     }
-    public static boolean isEmpty(ArrayQueueADT queue){
+    // Post: res = queue[head] && size = size' - 1
+
+
+    public static boolean isEmpty(ArrayQueueADT queue) {
         return queue.head == queue.tail;
     }
-    public static void clear(ArrayQueueADT queue){
+    // Post: Res = size > 0? && queue is immutable
+
+
+    public static void clear(ArrayQueueADT queue) {
         Arrays.fill(queue.elements, null);
         queue.head = 0;
         queue.tail = 0;
     }
-    public static Object element(ArrayQueueADT queue){
-        if (isEmpty(queue)){
+    // Post: size = 0, head = 0, tail = 0
+
+
+    // Pre: size > 0
+    public static Object element(ArrayQueueADT queue) {
+        if (isEmpty(queue)) {
             return null;
         }
         return queue.elements[queue.head];
     }
-    public static int size(ArrayQueueADT queue){
+    // Post: res = queue[head] && queue is immutable
+
+
+    public static int size(ArrayQueueADT queue) {
         if (queue.head > queue.tail) {
             return queue.elements.length - queue.head + queue.tail;
         }
         return queue.tail - queue.head;
     }
+    // Post: res = size (size of queue)
+
 }
